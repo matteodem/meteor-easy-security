@@ -164,7 +164,42 @@ Tinytest.addAsync('EasySecurity API - Methods - throttle', function (test, resol
   Meteor.setTimeout(function () {
     test.equal(number, 3);
     resolve();
-  }, 500);
+  }, 520);
+});
+
+Tinytest.addAsync('EasySecurity API - Methods - debounce', function (test, resolve) {
+  var number = 0,
+    wrapped;
+
+  function testFunction() {
+    number += 1;
+  }
+
+  wrapped = EasySecurity.debounce(testFunction, 200);
+  wrapped();
+  wrapped();
+
+  test.equal(number, 0);
+
+  Meteor.setTimeout(function () {
+    test.equal(number, 0);
+    wrapped();
+  }, 100);
+
+  Meteor.setTimeout(function () {
+    test.equal(number, 0);
+    wrapped();
+  }, 150);
+
+  Meteor.setTimeout(function () {
+    test.equal(number, 0);
+    wrapped();
+  }, 200);
+
+  Meteor.setTimeout(function () {
+    test.equal(number, 1);
+    resolve();
+  }, 450);
 });
 
 if (Meteor.isClient) {
@@ -206,5 +241,5 @@ if (Meteor.isClient) {
   });
 }
 
-// TODO: debounce and method hooks
+// TODO: method hooks
 // TODO: Check why "login" doesn't work with rateLimit
