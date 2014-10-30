@@ -1,5 +1,17 @@
 if (Meteor.isServer) {
   Meteor.methods({
+    methodWithTruthHook: function () {
+      return 'worked';
+    },
+    methodWithFalseHook: function () {
+      return 'worked';
+    },
+    methodWithTruthAndFalseHook: function () {
+      return 'worked';
+    },
+    methodResetHooks: function () {
+      return 'worked';
+    },
     secureDivide: function (dividend, divisor) {
       return dividend / divisor;
     },
@@ -8,8 +20,40 @@ if (Meteor.isServer) {
     }
   });
 
+  EasySecurity.addHook('methodWithTruthHook', function () { return true; });
+  EasySecurity.addHook('methodWithFalseHook', function () { return false; });
+
+  EasySecurity.addHook('methodWithTruthAndFalseHook', function () { return true; });
+  EasySecurity.addHook('methodWithTruthAndFalseHook', function () { return false; });
+
+  EasySecurity.addHook('methodResetHooks', function () { return true; });
+
   EasySecurity.config({
     methods: { returnTwo : { type: "throttle", ms: 200 } }
+  });
+
+  Tinytest.add('EasySecurity API - Hooks - getHooks', function (test) {
+    var truthHooks = EasySecurity.getHooks('methodWithTruthHook'),
+      truthAndFalseHooks = EasySecurity.getHooks('methodWithTruthAndFalseHook');
+
+    test.isTrue(truthHooks[0]());
+    test.isUndefined(truthHooks[1]);
+
+    test.isTrue(truthAndFalseHooks[0]());
+    test.isFalse(truthAndFalseHooks[1]());
+    test.isUndefined(truthAndFalseHooks[2]);
+  });
+
+  Tinytest.add('EasySecurity API - Hooks - resetHooks', function (test) {
+    var hooks = EasySecurity.getHooks('methodResetHooks');
+
+    test.isTrue(hooks[0]());
+    test.isUndefined(hooks[1]);
+
+    EasySecurity.resetHooks('methodResetHooks');
+    hooks = EasySecurity.getHooks('methodResetHooks');
+    test.equal(hooks.length, 0);
+    test.isUndefined(hooks[0]);
   });
 }
 
@@ -167,7 +211,7 @@ Tinytest.addAsync('EasySecurity API - Methods - throttle', function (test, resol
   }, 520);
 });
 
-Tinytest.addAsync('EasySecurity API - Methods - debounce', function (test, resolve) {
+Tinytest.addAsync('EasySecurity API - debounce', function (test, resolve) {
   var number = 0,
     wrapped;
 
@@ -239,7 +283,25 @@ if (Meteor.isClient) {
       resolve();
     });
   });
+
+  Tinytest.addAsync('EasySecurity API - Hooks - addHook', function (test, resolve) {
+    Meteor.call('methodWithTruthHook', function (err, res) {
+      test.isUndefined(err);
+      test.equal(res, "worked");
+
+      Meteor.call('methodWithFalseHook', function (err, res) {
+        test.equal(err.error.constructor, String);
+        test.isUndefined(res);
+
+        Meteor.call('methodWithTruthAndFalseHook', function (err, res) {
+          test.equal(err.error.constructor, String);
+          test.isUndefined(res);
+
+          resolve();
+        });
+      });
+    });
+  });
 }
 
-// TODO: method hooks
 // TODO: Check why "login" doesn't work with rateLimit
