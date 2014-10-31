@@ -1,8 +1,8 @@
 Package.describe({
   name: 'matteodem:easy-security',
-  summary: ' /* Fill me in! */ ',
-  version: '1.0.0',
-  git: ' /* Fill me in! */ '
+  summary: 'Protection against harmful attacks by rate limiting all remote method calls ',
+  version: '0.1.0',
+  git: 'https://github.com/matteodem/meteor-easy-security.git'
 });
 
 Package.onUse(function(api) {
