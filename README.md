@@ -6,11 +6,12 @@ It wraps all defined Meteor.methods with a general __rate limit__ of __500ms__. 
 
 * Possibility to add hooks for interecepting execution (e.g "login")
 * Adding throttle, debounce and rate-limit to any function you want
+* Detailed configuration possibilities
 
 ```javascript
-// On Server, does not need to be called for general rate-limiting
-EasySecurity.config({
-  methods: { mySecureMethod: { type: "throttle", ms: 500 } }
+// On Server
+EasySecurity.addHook('login', function () {
+  // return a boolean
 });
 ```
 
@@ -20,7 +21,6 @@ var doSomethingSecure = EasySecurity.rateLimit(myFunction, 500);
 
 doSomethingSecure(); // Executes immediately
 doSomethingSecure(); // Executes after 500ms
-
 ```
 
 ## How to install
