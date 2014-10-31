@@ -11,7 +11,7 @@ Package.onUse(function(api) {
   api.addFiles('lib/easy-security.js');
   api.addFiles('lib/server.js', 'server');
 
-  api.use(['ddp@1.0.0', 'underscore', 'random']);
+  api.use(['ddp@1.0.11', 'underscore', 'random']);
 
   api.export('EasySecurity');
 });
