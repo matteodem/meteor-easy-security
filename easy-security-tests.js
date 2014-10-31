@@ -31,30 +31,6 @@ if (Meteor.isServer) {
   EasySecurity.config({
     methods: { returnTwo : { type: "throttle", ms: 200 } }
   });
-
-  Tinytest.add('EasySecurity API - Hooks - getHooks', function (test) {
-    var truthHooks = EasySecurity.getHooks('methodWithTruthHook'),
-      truthAndFalseHooks = EasySecurity.getHooks('methodWithTruthAndFalseHook');
-
-    test.isTrue(truthHooks[0]());
-    test.isUndefined(truthHooks[1]);
-
-    test.isTrue(truthAndFalseHooks[0]());
-    test.isFalse(truthAndFalseHooks[1]());
-    test.isUndefined(truthAndFalseHooks[2]);
-  });
-
-  Tinytest.add('EasySecurity API - Hooks - resetHooks', function (test) {
-    var hooks = EasySecurity.getHooks('methodResetHooks');
-
-    test.isTrue(hooks[0]());
-    test.isUndefined(hooks[1]);
-
-    EasySecurity.resetHooks('methodResetHooks');
-    hooks = EasySecurity.getHooks('methodResetHooks');
-    test.equal(hooks.length, 0);
-    test.isUndefined(hooks[0]);
-  });
 }
 
 Tinytest.add('EasySecurity API - config', function (test) {
@@ -304,4 +280,30 @@ if (Meteor.isClient) {
   });
 }
 
-// TODO: Check why "login" doesn't work with rateLimit
+if (Meteor.isServer) {
+  Tinytest.add('EasySecurity API - Hooks - getHooks', function (test) {
+    var truthHooks = EasySecurity.getHooks('methodWithTruthHook'),
+      truthAndFalseHooks = EasySecurity.getHooks('methodWithTruthAndFalseHook');
+
+    test.isTrue(truthHooks[0]());
+    test.isUndefined(truthHooks[1]);
+
+    test.isTrue(truthAndFalseHooks[0]());
+    test.isFalse(truthAndFalseHooks[1]());
+    test.isUndefined(truthAndFalseHooks[2]);
+  });
+
+  Tinytest.add('EasySecurity API - Hooks - resetHooks', function (test) {
+    var hooks = EasySecurity.getHooks('methodResetHooks');
+
+    test.isTrue(hooks[0]());
+    test.isUndefined(hooks[1]);
+
+    EasySecurity.resetHooks('methodResetHooks');
+    hooks = EasySecurity.getHooks('methodResetHooks');
+    test.equal(hooks.length, 0);
+    test.isUndefined(hooks[0]);
+
+    EasySecurity.addHook('methodResetHooks', function () { return true; });
+  });
+}
