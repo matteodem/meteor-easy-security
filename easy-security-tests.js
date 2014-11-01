@@ -12,6 +12,9 @@ if (Meteor.isServer) {
     methodResetHooks: function () {
       return 'worked';
     },
+    methodWithParamHook: function () {
+      return 'worked';
+    },
     secureDivide: function (dividend, divisor) {
       return dividend / divisor;
     },
@@ -22,6 +25,8 @@ if (Meteor.isServer) {
 
   EasySecurity.addHook('methodWithTruthHook', function () { return true; });
   EasySecurity.addHook('methodWithFalseHook', function () { return false; });
+
+  EasySecurity.addHook('methodWithParamHook', function (param) { return param; });
 
   EasySecurity.addHook('methodWithTruthAndFalseHook', function () { return true; });
   EasySecurity.addHook('methodWithTruthAndFalseHook', function () { return false; });
@@ -282,11 +287,15 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
   Tinytest.add('EasySecurity API - Hooks - getHooks', function (test) {
-    var truthHooks = EasySecurity.getHooks('methodWithTruthHook'),
+    var paramHooks = EasySecurity.getHooks('methodWithParamHook'),
+      truthHooks = EasySecurity.getHooks('methodWithTruthHook'),
       truthAndFalseHooks = EasySecurity.getHooks('methodWithTruthAndFalseHook');
 
     test.isTrue(truthHooks[0]());
     test.isUndefined(truthHooks[1]);
+
+    test.equal(paramHooks[0](true), true);
+    test.equal(paramHooks[0]('Hello'), 'Hello');
 
     test.isTrue(truthAndFalseHooks[0]());
     test.isFalse(truthAndFalseHooks[1]());
