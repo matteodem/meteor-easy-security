@@ -2,7 +2,7 @@ Easy Security
 ====================
 
 This package has been created because of following [post on Meteor Talk](https://groups.google.com/forum/#!topic/meteor-talk/XyYhi8ZMgd8).
-It wraps all defined Meteor.methods with a general __rate limit__ of __500ms__ per __connection__. It also does spam checks on the sockets and more. 
+It wraps all defined Meteor.methods with a general __rate limit__ of __500ms__ per __connection__. It also does spam checks on the sockets and more. It is [well tested](https://github.com/matteodem/meteor-easy-security/blob/master/easy-security-tests.js).
 
 * Possibility to add hooks for interecepting execution (e.g "login")
 * Adding throttle, debounce and rate-limit to any function you want
