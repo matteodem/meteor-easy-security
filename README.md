@@ -22,7 +22,7 @@ doSomethingSecure(); // Executes immediately
 doSomethingSecure(); // Executes after 500ms
 ```
 
-___This does not prevent any DDOS attacks! Have a look at [iptables](http://blog.bodhizazen.net/linux/prevent-dos-with-iptables/), [load balancer techniques](http://blog.haproxy.com/2012/02/27/use-a-load-balancer-as-a-first-row-of-defense-against-ddos/) and [more](https://www.google.ch/search?q=ddos+protection+web)___
+___This does not prevent DDOS attacks! Have a look at [iptables](http://blog.bodhizazen.net/linux/prevent-dos-with-iptables/), [LB techniques](http://blog.haproxy.com/2012/02/27/use-a-load-balancer-as-a-first-row-of-defense-against-ddos/) and [more](https://www.google.ch/search?q=ddos+protection+web)___
 
 ## How to install
 
