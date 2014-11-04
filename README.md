@@ -1,8 +1,7 @@
 Easy Security
 ====================
 
-This package has been created because of following [post on Meteor Talk](https://groups.google.com/forum/#!topic/meteor-talk/XyYhi8ZMgd8).
-It wraps all defined Meteor.methods with a general __rate limit__ of __500ms__ per __connection__. It also does spam checks on the sockets and more. 
+This package wraps all defined Meteor.methods with a general __rate limit__ of __500ms__ per __connection__. It also does spam checks on the sockets and more. The source code is [well tested](https://github.com/matteodem/meteor-easy-security/blob/master/easy-security-tests.js).
 
 * Possibility to add hooks for interecepting execution (e.g "login")
 * Adding throttle, debounce and rate-limit to any function you want
@@ -22,6 +21,8 @@ var doSomethingSecure = EasySecurity.rateLimit(myFunction, 500);
 doSomethingSecure(); // Executes immediately
 doSomethingSecure(); // Executes after 500ms
 ```
+
+___This does not prevent DDOS attacks! Have a look at [iptables](http://blog.bodhizazen.net/linux/prevent-dos-with-iptables/), [LB techniques](http://blog.haproxy.com/2012/02/27/use-a-load-balancer-as-a-first-row-of-defense-against-ddos/) and [more](https://www.google.ch/search?q=ddos+protection+web)___
 
 ## How to install
 
