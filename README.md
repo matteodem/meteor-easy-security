@@ -42,7 +42,8 @@ EasySecurity.config({
     createMethod: { type: 'rateLimit', ms: 1000 * 10 },
     commentMethod: { type: 'throttle', ms: 500 }
   },
-  ignoredMethods: ['someOtherMethod']
+  ignoredMethods: ['someOtherMethod'],
+  maxQueueLength: 200
 });
 ```
 
@@ -52,6 +53,7 @@ There is only 'rateLimit' and 'throttle' available to apply onto Meteor Methods.
 * __methods__ Set specific ways to handle defined methods
 * __ignoredMethods__ An array of ignored methods, that means not rateLimit or throttle applied
 * __debug__ Boolean if in debug mode or not
+* __maxQueueLength__ Resets the queue (per id) after the the length is exceeded
 
 ## Hooks
 
