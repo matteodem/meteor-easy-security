@@ -1,4 +1,4 @@
-Easy Security
+Easy Security [![Build Status](https://travis-ci.org/matteodem/meteor-easy-security.svg?branch=master)](https://travis-ci.org/matteodem/meteor-easy-security)
 ====================
 
 This package wraps all defined Meteor.methods with a general __rate limit__ of __500ms__ per __connection__. It also does spam checks on the sockets and more. The source code is [well tested](https://github.com/matteodem/meteor-easy-security/blob/master/easy-security-tests.js).
