@@ -1,3 +1,5 @@
+var testCollection = new Meteor.Collection('testCollection');
+
 if (Meteor.isServer) {
   Meteor.methods({
     methodWithTruthHook: function () {
@@ -20,6 +22,9 @@ if (Meteor.isServer) {
     },
     returnTwo: function () {
       return 2;
+    },
+    throwErrorMethod: function () {
+      throw new Meteor.Error('invalid-call', 'The method is deprecated!');
     }
   });
 
@@ -36,6 +41,21 @@ if (Meteor.isServer) {
   EasySecurity.config({
     methods: { returnTwo : { type: "throttle", ms: 200 } }
   });
+
+  testCollection.allow({
+    insert: function () { return false; },
+    update: function () { return false; },
+    remove: function () { return false; }
+  });
+
+  testCollection.remove({});
+  testCollection.insert({ _id: 'testId', value: 'testValue' });
+
+  Meteor.publish('all', function () {
+    return testCollection.find();
+  });
+} else if (Meteor.isClient) {
+  Meteor.subscribe('all');
 }
 
 Tinytest.add('EasySecurity API - config', function (test) {
@@ -283,7 +303,53 @@ if (Meteor.isClient) {
       });
     });
   });
+
+  // Test commonly used functionality
+  
+  Tinytest.addAsync('EasySecurity - Multiple failed collection inserts', function (test, resolve) {
+    testCollection.insert({ test: 'value' });
+    testCollection.insert({ test: 'value' });
+
+    Meteor.setTimeout(function () {
+      test.equal(testCollection.find().fetch().length, 2);
+    }, 700);
+
+    Meteor.setTimeout(function () {
+      test.equal(testCollection.find().fetch().length, 1);
+      resolve();
+    }, 1100);
+  });
+
+  Tinytest.addAsync('EasySecurity - Multiple failed collection updates', function (test, resolve) {
+    testCollection.update({ _id: 'testId' }, { $set: { value: 'testValue2' } });
+    testCollection.update({ _id: 'testId' }, { $set: { value: 'testValue3' } });
+
+    Meteor.setTimeout(function () {
+      test.equal(testCollection.find().fetch().length, 1);
+      test.equal(testCollection.findOne().value, 'testValue');
+      resolve();
+    }, 1100);
+  });
+
+  Tinytest.addAsync('EasySecurity - Multiple failed collection removes', function (test, resolve) {
+    testCollection.update({ _id: 'testId' });
+    testCollection.insert({ _id: 'testId' });
+
+    Meteor.setTimeout(function () {
+      test.equal(testCollection.find().fetch().length, 1);
+      resolve();
+    }, 1100);
+  });
 }
+
+Tinytest.addAsync('EasySecurity - Throwing errors', function (test, resolve) {
+  Meteor.call('throwErrorMethod', function (err, data) {
+    test.equal(err.error, 'invalid-call');
+    test.equal(err.reason, 'The method is deprecated!');
+    test.isUndefined(data);
+    resolve();
+  });
+});
 
 if (Meteor.isServer) {
   Tinytest.add('EasySecurity API - Hooks - getHooks', function (test) {
