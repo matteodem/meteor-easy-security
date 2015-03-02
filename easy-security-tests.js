@@ -332,8 +332,8 @@ if (Meteor.isClient) {
   });
 
   Tinytest.addAsync('EasySecurity - Multiple failed collection removes', function (test, resolve) {
-    testCollection.update({ _id: 'testId' });
-    testCollection.insert({ _id: 'testId' });
+    testCollection.remove({ _id: 'testId' });
+    testCollection.remove({ _id: 'testId' });
 
     Meteor.setTimeout(function () {
       test.equal(testCollection.find().fetch().length, 1);
