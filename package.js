@@ -1,7 +1,7 @@
 Package.describe({
   name: 'matteodem:easy-security',
-  summary: 'Protection against attacks by rate limiting remote calls + hooking functionality',
-  version: '0.1.4',
+  summary: 'DEPRECATED: Protection against attacks by rate limiting remote calls + hooking functionality',
+  version: '0.1.5',
   git: 'https://github.com/matteodem/meteor-easy-security.git'
 });
 
