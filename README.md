@@ -4,7 +4,7 @@ Easy Security [![Build Status](https://travis-ci.org/matteodem/meteor-easy-secur
 This package wraps all defined Meteor.methods with a general __rate limit__ of __500ms__ per __connection__. It also does spam checks on the sockets and more. The source code is [well tested](https://github.com/matteodem/meteor-easy-security/blob/master/easy-security-tests.js).
 
 * Possibility to add hooks for interecepting execution (e.g "login")
-* Adding throttle, debounce and rate-limit to any function you want
+* Adding [throttle](http://drupalmotion.com/article/debounce-and-throttle-visual-explanation), [debounce](http://drupalmotion.com/article/debounce-and-throttle-visual-explanation) and rate-limit to any function you want
 * Detailed configuration possibilities
 
 ```javascript
